@@ -15,7 +15,7 @@ def get_file_content(working_directory, file_path):
         with open(target_file, "r") as f:
             file_content_string = f.read(MAX_CHARS)
 
-            if len(f.read()) > MAX_CHARS:
+            if os.path.getsize(target_file) > MAX_CHARS:
                 return file_content_string + "\n" + f'[...File "{file_path}" truncated at 10000 characters]'
             
             return file_content_string

@@ -18,4 +18,4 @@ def get_files_info(working_directory, directory="."):
             final_string += f"- {filename}: file_size={os.path.getsize(file_path)} bytes, is_dir={os.path.isdir(file_path)} \n"            
         return final_string
     except Exception as e:
-        return f"Error: Error getting file info: {e}"
+        return f"Error: getting file info: {e}"

@@ -17,15 +17,6 @@ def call_function(function_call_part, verbose=False):
 
     args_dict["working_directory"] = "./calculator"
 
-    # if function_name == "get_file_content":
-    #     functions_dict[function_name] = get_file_content(**args_dict)
-    # if function_name == "get_files_info":
-    #     functions_dict[function_name] = get_files_info(**args_dict)
-    # if function_name == "run_python_file":
-    #     functions_dict[function_name] = run_python_file(**args_dict)
-    # if function_name == "write_file":
-    #     functions_dict[function_name] = write_file(**args_dict)
-
     functions_dict = {
         "get_file_content": get_file_content,
         "get_files_info": get_files_info,

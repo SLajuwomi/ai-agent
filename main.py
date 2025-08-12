@@ -3,6 +3,9 @@ import sys
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+from config import system_prompt
+from functions.get_files_info import available_functions
+
 
 def main():
     load_dotenv()
@@ -17,18 +20,27 @@ def main():
         user_prompt = args[0]
     else:
         print("Prompt not provided")
-        print("Here is the correct usage: uv run main.py \"your_prompt_goes_here\"")
-        print("Example: uv run main.py \"How manr r's are in the word strawberry\"")
+        print('Here is the correct usage: uv run main.py "your_prompt_goes_here"')
+        print('Example: uv run main.py "How manr r\'s are in the word strawberry"')
         sys.exit(1)
 
     messages = [types.Content(role="user", parts=[types.Part(text=user_prompt)])]
 
     response = client.models.generate_content(
         model="gemini-2.0-flash-001",
-        contents=messages
+        contents=messages,
+        config=types.GenerateContentConfig(
+            tools=[available_functions], system_instruction=system_prompt
+        ),
     )
 
     print(response.text)
+
+    if response.function_calls:
+        for function_call_part in response.function_calls:
+            print(
+                f"Calling function: {function_call_part.name}({function_call_part.args})"
+            )
 
     if args and "--verbose" in args:
         print("User prompt:", user_prompt)

@@ -4,8 +4,7 @@ from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 from config import system_prompt
-from functions.get_files_info import available_functions
-from functions.call_function import call_function
+from functions.call_function import call_function, available_functions
 
 
 def main():
@@ -16,7 +15,6 @@ def main():
 
     client = genai.Client(api_key=api_key)
 
-    # this is a list
     args = sys.argv[1:]
 
     if args:
@@ -39,15 +37,9 @@ def main():
                 ),
             )
 
-            # print("\nDoes response function calls exist: ", response.function_calls)
-
             if response.function_calls:
                 for function_call_part in response.function_calls:
-                    # print(
-                    #     f"Calling function: {function_call_part.name}({function_call_part.args})"
-                    # )
                     result = call_function(function_call_part, verbose)
-                    # print("\ncall function result: ", result)
 
                     if result.parts[0].function_response.response and verbose:
                         print(f"-> {result.parts[0].function_response.response}")
@@ -65,14 +57,11 @@ def main():
                         )
                     )
 
-                    # print("\nmessages check 1: ", messages)
-
                     if not result.parts[0].function_response.response:
                         raise Exception("Tool calling failed")
 
             for candidate in response.candidates:
                 messages.append(candidate.content)
-                # print("\nmessages check 2: ", messages)
 
             if args and verbose:
                 print("User prompt:", user_prompt)
@@ -86,8 +75,6 @@ def main():
 
         except Exception as e:
             return f"Error: generating response: {e}"
-
-    # print(response.text)
 
 
 if __name__ == "__main__":

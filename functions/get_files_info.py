@@ -52,7 +52,7 @@ schema_get_file_content = types.FunctionDeclaration(
 )
 
 schema_run_python_file = types.FunctionDeclaration(
-    name="run_python",
+    name="run_python_file",
     description="Execute python files at the designated path with necessary arguments that the file may require, only Python files are allowed to be executed. Constrained to the working directory.",
     parameters=types.Schema(
         type=types.Type.OBJECT,
@@ -63,7 +63,7 @@ schema_run_python_file = types.FunctionDeclaration(
             ),
             "args": types.Schema(
                 type=types.Type.STRING,
-                description="The array of arguments that the Python file may require for execution as an array. This array is unpacked by the function. The parameter is not required and is set to an empty array if not set.",
+                description="The OPTIONAL array of arguments that the Python file may require for execution as an array. NEVER ASK THE USER TO PROVIDE ARGUMENTS! You will determine if a particular function call you want to use needs arguments by reading the file and passing arguments based on the user's request. The user will give you plain text commands, it is up to you to determine if you can complete this task with the provided files and functions and what arguments need to be passed based on the files. This array is unpacked by the function. The parameter is NOT required and if not provided, is is set by default to an empty array by the function.",
             ),
         },
     ),

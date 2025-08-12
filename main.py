@@ -5,6 +5,7 @@ from google import genai
 from google.genai import types
 from config import system_prompt
 from functions.get_files_info import available_functions
+from functions.call_function import call_function
 
 
 def main():
@@ -41,6 +42,11 @@ def main():
             print(
                 f"Calling function: {function_call_part.name}({function_call_part.args})"
             )
+            result = call_function(function_call_part=function_call_part)
+            if result.parts[0].function_response.response and args[1]:
+                print(f"-> {result.parts[0].function_response.response}")
+            else:
+                raise Exception("Tool calling failed")
 
     if args and "--verbose" in args:
         print("User prompt:", user_prompt)
